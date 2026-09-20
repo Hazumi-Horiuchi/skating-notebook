@@ -1,0 +1,1172 @@
+/* ==============================
+   全体
+============================== */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: #f3f7fb;
+  color: #333;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+/* ==============================
+   画面全体
+============================== */
+
+.screen {
+  width: 100%;
+  max-width: 640px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  background: #ffffff;
+}
+
+
+/* ==============================
+   見出し
+============================== */
+
+.page-header {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.page-header h1 {
+  margin: 0 0 12px;
+  font-size: 26px;
+  line-height: 1.5;
+  color: #24527a;
+}
+
+.page-header h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  line-height: 1.5;
+  color: #24527a;
+}
+
+.page-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+
+/* ==============================
+   ボタンのグループ
+============================== */
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+
+/* ==============================
+   共通ボタン
+============================== */
+
+.main-button,
+.secondary-button,
+.complete-button,
+.add-attempt-button {
+  display: block;
+  width: 100%;
+  padding: 15px 18px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.5;
+  transition:
+    opacity 0.2s,
+    transform 0.1s;
+}
+
+.main-button:active,
+.secondary-button:active,
+.complete-button:active,
+.add-attempt-button:active {
+  transform: scale(0.98);
+}
+
+.main-button:hover,
+.secondary-button:hover,
+.complete-button:hover,
+.add-attempt-button:hover {
+  opacity: 0.8;
+}
+
+
+/* メインボタン */
+
+.main-button {
+  border: 2px solid #8bbce8;
+  background: #dceeff;
+  color: #24527a;
+}
+
+
+/* サブボタン */
+
+.secondary-button {
+  margin-top: 12px;
+  border: 2px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+}
+
+
+/* 完了ボタン */
+
+.complete-button {
+  margin-top: 28px;
+  border: 2px solid #72a9d8;
+  background: #8fc4ed;
+  color: #173f5f;
+}
+
+
+/* 試行追加ボタン */
+
+.add-attempt-button {
+  margin-top: 20px;
+  border: 2px dashed #8bbce8;
+  background: #f0f8ff;
+  color: #24527a;
+}
+
+
+/* ==============================
+   入力フォーム
+============================== */
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #374151;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #333;
+  font-size: 16px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.attempt-card textarea:focus {
+  outline: none;
+  border-color: #72a9d8;
+  box-shadow: 0 0 0 3px rgba(114, 169, 216, 0.2);
+}
+
+.form-group textarea,
+.attempt-card textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+
+/* ==============================
+   選択したエレメンツ
+============================== */
+
+.selected-elements {
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid #cfe3f5;
+  border-radius: 12px;
+  background: #f5faff;
+}
+
+.selected-elements h3 {
+  margin: 0 0 12px;
+  font-size: 17px;
+  color: #24527a;
+}
+
+.selected-elements ul {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.selected-elements li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+
+/* ==============================
+   エレメンツ完了後の選択肢
+============================== */
+
+.complete-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.complete-options .secondary-button {
+  margin-top: 0;
+}
+
+
+/* ==============================
+   練習記録カード
+============================== */
+
+.attempt-card {
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid #d6e4ef;
+  border-radius: 14px;
+  background: #f8fbfe;
+}
+
+.attempt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.attempt-header strong {
+  font-size: 17px;
+  color: #24527a;
+}
+
+
+/* 試行削除ボタン */
+
+.delete-button {
+  padding: 6px 10px;
+  border: 1px solid #f0a3a3;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: #c24141;
+  font-size: 13px;
+}
+
+.delete-button:hover {
+  opacity: 0.75;
+}
+
+.delete-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+
+/* ○△×ボタン */
+
+.result-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.result-button {
+  flex: 1;
+  height: 52px;
+  padding: 0 8px;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.result-symbol {
+  display: inline-block;
+  line-height: 1;
+}
+
+.result-good-symbol {
+  font-size: 22px;
+}
+
+.result-maybe-symbol {
+  font-size: 20px;
+}
+
+.result-bad-symbol {
+  font-size: 22px;
+}
+
+.result-button:hover {
+  opacity: 0.8;
+}
+
+.result-button.selected-good {
+  border-color: #65a982;
+  background: #dff4e5;
+  color: #267342;
+}
+
+.result-button.selected-maybe {
+  border-color: #d6ad55;
+  background: #fff3cc;
+  color: #946c16;
+}
+
+.result-button.selected-bad {
+  border-color: #df8585;
+  background: #ffe2e2;
+  color: #b83232;
+}
+
+
+/* 試行メモ */
+
+.attempt-card textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 15px;
+}
+
+
+/* ==============================
+   スマートフォン向け調整
+============================== */
+
+@media (max-width: 480px) {
+  .screen {
+    padding: 20px 16px 32px;
+  }
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+
+  .page-header h2 {
+    font-size: 22px;
+  }
+
+  .main-button,
+  .secondary-button,
+  .complete-button,
+  .add-attempt-button {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  .result-button {
+    font-size: 20px;
+  }
+}
+
+/* ==============================
+   練習履歴画面
+============================== */
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.history-card {
+  padding: 18px;
+  border: 1px solid #d6e4ef;
+  border-radius: 14px;
+  background: #f8fbfe;
+}
+
+.history-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.history-card-header h3 {
+  margin: 0;
+  color: #24527a;
+  font-size: 20px;
+}
+
+.practice-type {
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #dceeff;
+  color: #24527a;
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.history-card > p {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+.history-section {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #dce6ee;
+}
+
+.history-section h4 {
+  margin: 0 0 6px;
+  color: #456b87;
+  font-size: 15px;
+}
+
+.history-section p {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+.empty-message {
+  padding: 32px 16px;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* ==============================
+   履歴カードのクリック設定
+============================== */
+
+.history-card {
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+.history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(36, 82, 122, 0.12);
+}
+
+
+/* ==============================
+   練習記録の詳細画面
+============================== */
+
+.detail-card {
+  padding: 18px;
+  border: 1px solid #d6e4ef;
+  border-radius: 14px;
+  background: #f8fbfe;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #dce6ee;
+}
+
+.detail-row strong {
+  color: #456b87;
+}
+
+.detail-row span {
+  text-align: right;
+}
+
+.detail-section {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid #dce6ee;
+}
+
+.detail-section h3 {
+  margin: 0 0 8px;
+  color: #456b87;
+  font-size: 16px;
+}
+
+.detail-section p {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+.detail-elements-list {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.detail-elements-list li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* ==============================
+   履歴詳細：エレメンツ表示の調整
+============================== */
+
+.detail-section {
+  text-align: left;
+}
+
+.detail-elements-list {
+  padding: 0;
+  margin: 0;
+}
+
+.detail-element {
+  margin-bottom: 18px;
+  padding: 14px;
+  background: #ffffff;
+  border: 1px solid #dce6ee;
+  border-radius: 10px;
+}
+
+.detail-element:last-child {
+  margin-bottom: 0;
+}
+
+.detail-element-title {
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #456b87;
+  text-align: left;
+}
+
+.attempt-summary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.attempt-total {
+  font-weight: bold;
+  color: #475569;
+}
+
+.summary-good {
+  color: #267342;
+  font-weight: bold;
+}
+
+.summary-maybe {
+  color: #946c16;
+  font-weight: bold;
+}
+
+.summary-bad {
+  color: #b83232;
+  font-weight: bold;
+}
+
+.detail-attempts {
+  width: 100%;
+}
+
+.detail-attempt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-top: 1px solid #edf1f4;
+}
+
+.detail-result {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.detail-attempt-number {
+  font-size: 13px;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.detail-attempt-memo {
+  flex: 1;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* ==============================
+   練習記録の編集
+============================== */
+
+.detail-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.record-delete-button {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #df8585;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #b83232;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.record-delete-button:hover {
+  background: #ffe2e2;
+}
+
+/* ==============================
+   エレメンツ試行編集ボタン
+============================== */
+
+.element-edit-button {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid #8bbce8;
+  border-radius: 8px;
+  background: #f0f8ff;
+  color: #24527a;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.element-edit-button:hover {
+  opacity: 0.8;
+}
+
+/* ==============================
+   エレメンツ情報の編集・削除
+============================== */
+
+.element-info-edit-button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.element-info-edit-button:hover {
+  background: #f8fafc;
+}
+
+.element-delete-button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid #f0a3a3;
+  border-radius: 8px;
+  background: #fffafa;
+  color: #b83232;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.element-delete-button:hover {
+  background: #ffecec;
+}
+
+/* ==============================
+   履歴：日付ごとのセッション表示
+============================== */
+
+.history-day {
+  margin-bottom: 32px;
+}
+
+.history-date {
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #dceeff;
+  color: #24527a;
+  font-size: 19px;
+}
+
+.history-day-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ==============================
+   設定・バックアップ
+============================== */
+
+.settings-section {
+  margin-bottom: 28px;
+  padding: 18px;
+  border: 1px solid #d6e4ef;
+  border-radius: 14px;
+  background: #f8fbfe;
+}
+
+.settings-section h3 {
+  margin: 0 0 10px;
+  color: #24527a;
+  font-size: 18px;
+}
+
+.settings-description {
+  margin: 0 0 16px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.import-button {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 15px 18px;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+
+.import-button:hover {
+  opacity: 0.8;
+}
+
+.import-button input {
+  display: none;
+}
+
+/* ==============================
+   練習履歴：月表示カレンダー
+============================== */
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.calendar-header h3 {
+  margin: 0;
+  color: #24527a;
+  font-size: 20px;
+}
+
+.calendar-nav-button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #24527a;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.calendar-nav-button:hover {
+  background: #f0f8ff;
+}
+
+
+/* 曜日 */
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 6px;
+  text-align: center;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+
+/* 日付グリッド */
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-empty {
+  aspect-ratio: 1 / 1;
+}
+
+
+/* 日付ボタン */
+
+.calendar-day {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #475569;
+}
+
+.calendar-day:hover {
+  background: #f0f8ff;
+}
+
+.calendar-day-number {
+  font-size: 15px;
+}
+
+
+/* 練習記録がある日 */
+
+.calendar-day.has-record {
+  background: #eef7ff;
+  color: #24527a;
+  font-weight: bold;
+}
+
+
+/* 選択中 */
+
+.calendar-day.selected-day {
+  border: 2px solid #72a9d8;
+  background: #dceeff;
+}
+
+
+/* セッション件数 */
+
+.calendar-record-count {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  display: flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #8bbce8;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+
+/* 選択日の記録 */
+
+.selected-day-section {
+  margin-top: 28px;
+}
+
+.selected-day-title {
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #dceeff;
+  color: #24527a;
+  font-size: 19px;
+}
+
+/* ==============================
+   最近使ったエレメンツ
+============================== */
+
+.recent-elements-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #d6e4ef;
+  border-radius: 14px;
+  background: #f8fbfe;
+}
+
+.recent-elements-section h3 {
+  margin: 0 0 12px;
+  color: #24527a;
+  font-size: 16px;
+}
+
+.recent-elements-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.recent-element-button {
+  padding: 10px 14px;
+  border: 1px solid #b8cfe3;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #24527a;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.recent-element-button:hover {
+  background: #eef7ff;
+}
+
+.recent-element-button.recent-element-selected {
+  border: 2px solid #72a9d8;
+  background: #dceeff;
+  font-weight: bold;
+}
+
+/* ==============================
+   練習項目検索
+============================== */
+
+.search-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -4px 0 20px;
+}
+
+.search-result-button {
+  padding: 10px 14px;
+  border: 1px solid #b8cfe3;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #24527a;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.search-result-button:hover {
+  background: #eef7ff;
+}
+
+.search-result-button.search-result-selected {
+  border: 2px solid #72a9d8;
+  background: #dceeff;
+  font-weight: bold;
+}
+
+/* ==============================
+   ジャンプ構成入力
+============================== */
+
+.jump-combination-section {
+  margin-bottom: 22px;
+}
+
+.jump-select-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.jump-select-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.jump-delete-button {
+  flex-shrink: 0;
+  margin-bottom: 0;
+  padding: 12px 14px;
+  border: 1px solid #f0a3a3;
+  border-radius: 10px;
+  background: #fff5f5;
+  color: #c24141;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.add-jump-button {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px dashed #8bbce8;
+  border-radius: 10px;
+  background: #f8fbfe;
+  color: #24527a;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-jump-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.jump-selection-preview {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f0f8ff;
+  color: #24527a;
+  text-align: left;
+}
+
+.jump-selection-preview strong {
+  margin-left: 6px;
+  font-size: 17px;
+}
+
+/* ==============================
+   スピン姿勢入力
+============================== */
+
+.spin-input-section {
+  margin-bottom: 22px;
+}
+
+.spin-position-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.spin-position-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.spin-position-delete-button {
+  flex-shrink: 0;
+  margin-bottom: 0;
+  padding: 12px 14px;
+  border: 1px solid #f0a3a3;
+  border-radius: 10px;
+  background: #fff5f5;
+  color: #c24141;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.add-spin-position-button {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px dashed #8bbce8;
+  border-radius: 10px;
+  background: #f8fbfe;
+  color: #24527a;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-spin-position-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.spin-block {
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid #d6e4ef;
+  border-radius: 14px;
+  background: #f8fbfe;
+}
+
+.spin-block h3 {
+  margin: 0 0 14px;
+  color: #24527a;
+  font-size: 16px;
+}
+
+/* ==============================
+   練習記録 編集画面
+============================== */
+
+.edit-form-card {
+  padding: 18px;
+  border: 1px solid #d6e4ef;
+  border-radius: 14px;
+  background: #f8fbfe;
+  margin-bottom: 24px;
+}
+
+.form-section + .form-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #dce6ee;
+}
+
+.form-section-title {
+  margin: 0 0 14px;
+  color: #24527a;
+  font-size: 18px;
+}
+
+.edit-form-card + .main-button {
+  margin-top: 8px;
+}
