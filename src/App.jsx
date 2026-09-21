@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import "./App.css"
 
+
 function App() {
   // -----------------------------
   // 画面管理
@@ -455,6 +456,14 @@ const recentElements = []
         }
       })
   })
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    })
+  }, [screen])
 
   // -----------------------------
   // ホーム画面

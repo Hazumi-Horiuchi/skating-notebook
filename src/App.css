@@ -388,7 +388,10 @@ button:disabled {
 
 @media (max-width: 480px) {
   .screen {
-    padding: 20px 16px 32px;
+    padding:
+      20px
+      16px
+      calc(96px + env(safe-area-inset-bottom));
   }
 
   .page-header h1 {
