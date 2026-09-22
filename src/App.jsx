@@ -34,6 +34,10 @@ function App() {
   // 練習記録
   // -----------------------------
   const [attempts, setAttempts] = useState([])
+  const [recordMode, setRecordMode] = useState("")
+  const [timedDuration, setTimedDuration] = useState("")
+  const [timedResult, setTimedResult] = useState("")
+  const [timedMemo, setTimedMemo] = useState("")
 
   // -----------------------------
   // セッション振り返り
@@ -334,6 +338,26 @@ const exportRecordsCsv = () => {
   sortedRecords.forEach((record) => {
     const elementSummary = (record.elements || [])
       .map((element) => {
+        // 時間でまとめて記録した場合
+        if (
+          element.recordMode === "timed" &&
+          element.timedRecord
+        ) {
+          const duration =
+            element.timedRecord.duration || ""
+
+          const result =
+            element.timedRecord.result || ""
+
+          const memo =
+            element.timedRecord.memo || ""
+
+          return `${element.category}:${element.name} ${duration}分 ${result}${
+            memo ? ` メモ:${memo}` : ""
+          }`
+        }
+
+        // 1本ずつ記録した場合
         const attempts = element.attempts || []
 
         const good = attempts.filter(
@@ -1135,7 +1159,11 @@ const recentElements = []
               },
             ])
 
-            setScreen("elementRecord")
+            setRecordMode("")
+            setTimedDuration("")
+            setTimedResult("")
+            setTimedMemo("")
+            setScreen("recordModeSelect")
           }}
         >
           このエレメンツの練習を開始
@@ -1159,6 +1187,203 @@ const recentElements = []
     )
   }
 
+  // -----------------------------
+  // 記録方法選択画面
+  // -----------------------------
+  if (screen === "recordModeSelect") {
+    const currentElement =
+      selectedElements[selectedElements.length - 1]
+
+    return (
+      <div className="screen">
+        <div className="page-header">
+          <h2>記録方法を選択</h2>
+
+          {currentElement && (
+            <p>
+              {currentElement.category}：
+              {currentElement.name}
+            </p>
+          )}
+        </div>
+
+        <div className="complete-options">
+          <button
+            className="main-button"
+            onClick={() => {
+              setRecordMode("attempt")
+              setScreen("elementRecord")
+            }}
+          >
+            1本ずつ記録する
+          </button>
+
+          <button
+            className="main-button"
+            onClick={() => {
+              setRecordMode("timed")
+              setScreen("timedRecord")
+            }}
+          >
+            時間でまとめて記録する
+          </button>
+        </div>
+
+        <button
+          className="secondary-button"
+          onClick={() => {
+            setSelectedElements((prevElements) =>
+              prevElements.slice(0, -1)
+            )
+
+            setAttempts([])
+            setRecordMode("")
+            setScreen("elementSelect")
+          }}
+        >
+          練習項目の選択に戻る
+        </button>
+      </div>
+    )
+  }
+
+  // -----------------------------
+  // 時間でまとめて練習記録
+  // -----------------------------
+  if (screen === "timedRecord") {
+    const currentElement =
+      selectedElements[selectedElements.length - 1]
+
+    return (
+      <div className="screen">
+        <div className="page-header">
+          <h2>エレメンツ練習記録</h2>
+
+          {currentElement && (
+            <p>
+              {currentElement.category}：
+              {currentElement.name}
+            </p>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>練習時間（分）</label>
+
+          <input
+            type="number"
+            min="1"
+            value={timedDuration}
+            onChange={(e) =>
+              setTimedDuration(e.target.value)
+            }
+            placeholder="例：5"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>総合評価</label>
+
+          <div className="result-buttons">
+            <button
+              type="button"
+              className={`result-button ${
+                timedResult === "○"
+                  ? "selected-good"
+                  : ""
+              }`}
+              onClick={() => setTimedResult("○")}
+            >
+              <span className="result-symbol result-good-symbol">
+                ○
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className={`result-button ${
+                timedResult === "△"
+                  ? "selected-maybe"
+                  : ""
+              }`}
+              onClick={() => setTimedResult("△")}
+            >
+              <span className="result-symbol result-maybe-symbol">
+                △
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className={`result-button ${
+                timedResult === "×"
+                  ? "selected-bad"
+                  : ""
+              }`}
+              onClick={() => setTimedResult("×")}
+            >
+              <span className="result-symbol result-bad-symbol">
+                ×
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>メモ</label>
+
+          <textarea
+            value={timedMemo}
+            onChange={(e) =>
+              setTimedMemo(e.target.value)
+            }
+            placeholder="この練習についてのメモ"
+            rows="4"
+          />
+        </div>
+
+        <button
+          className="complete-button"
+          disabled={
+            timedDuration === "" ||
+            timedResult === ""
+          }
+          onClick={() => {
+            setSelectedElements((prevElements) =>
+              prevElements.map((element, index) =>
+                index === prevElements.length - 1
+                  ? {
+                      ...element,
+                      recordMode: "timed",
+                      timedRecord: {
+                        duration: timedDuration,
+                        result: timedResult,
+                        memo: timedMemo,
+                      },
+                      attempts: [],
+                    }
+                  : element
+              )
+            )
+
+            setAttempts([])
+            setScreen("elementComplete")
+          }}
+        >
+          このエレメンツの練習を完了
+        </button>
+
+        <button
+          className="secondary-button"
+          onClick={() =>
+            setScreen("recordModeSelect")
+          }
+        >
+          記録方法の選択に戻る
+        </button>
+      </div>
+    )
+  }
   // -----------------------------
   // エレメンツ練習記録画面
   // -----------------------------
@@ -1261,6 +1486,37 @@ const recentElements = []
           onClick={() => setScreen("elementComplete")}
         >
           このエレメンツの練習を完了
+        </button>
+
+        <button
+          className="secondary-button"
+          onClick={() => {
+            const hasInput = attempts.some(
+              (attempt) =>
+                attempt.result !== "" ||
+                attempt.memo.trim() !== ""
+            )
+
+            if (hasInput) {
+              const confirmed = window.confirm(
+                "入力中の○△×やメモは破棄されます。\n練習項目の選択に戻りますか？"
+              )
+
+              if (!confirmed) {
+                return
+              }
+            }
+
+            setSelectedElements((prevElements) =>
+              prevElements.slice(0, -1)
+            )
+
+            setAttempts([])
+
+            setScreen("elementSelect")
+          }}
+        >
+          練習項目の選択に戻る
         </button>
       </div>
     )
@@ -1624,74 +1880,104 @@ const recentElements = []
                       {element.category}：{element.name}
                     </div>
 
-                    {element.attempts && element.attempts.length > 0 && (
-                      <div className="attempt-summary">
-                        <span className="attempt-total">
-                          {element.attempts.length}本
-                        </span>
-
-                        <span className="summary-good">
-                          ○{" "}
-                          {
-                            element.attempts.filter(
-                              (attempt) => attempt.result === "○"
-                            ).length
-                          }
-                        </span>
-
-                        <span className="summary-maybe">
-                          △{" "}
-                          {
-                            element.attempts.filter(
-                              (attempt) => attempt.result === "△"
-                            ).length
-                          }
-                        </span>
-
-                        <span className="summary-bad">
-                          ×{" "}
-                          {
-                            element.attempts.filter(
-                              (attempt) => attempt.result === "×"
-                            ).length
-                          }
-                        </span>
-                      </div>
-                    )}
-
-                    {element.attempts && element.attempts.length > 0 ? (
+                    {element.recordMode === "timed" && element.timedRecord ? (
                       <div className="detail-attempts">
-                        {element.attempts.map((attempt, attemptIndex) => (
-                          <div
-                            className="detail-attempt"
-                            key={attempt.id ?? attemptIndex}
+                        <div className="detail-attempt">
+                          <span
+                            className={`detail-result ${
+                              element.timedRecord.result === "○"
+                                ? "detail-result-good"
+                                : element.timedRecord.result === "△"
+                                ? "detail-result-maybe"
+                                : element.timedRecord.result === "×"
+                                ? "detail-result-bad"
+                                : ""
+                            }`}
                           >
-                            <span
-                              className={`detail-result ${
-                                attempt.result === "○"
-                                  ? "detail-result-good"
-                                  : attempt.result === "△"
-                                  ? "detail-result-maybe"
-                                  : attempt.result === "×"
-                                  ? "detail-result-bad"
-                                  : ""
-                              }`}
-                            >
-                              {attempt.result || "－"}
-                            </span>
+                            {element.timedRecord.result || "－"}
+                          </span>
 
-                            <span className="detail-attempt-number">
-                              {attemptIndex + 1}本目
-                            </span>
+                          <span className="detail-attempt-number">
+                            {element.timedRecord.duration}分
+                          </span>
 
-                            {attempt.memo && (
-                              <span className="detail-attempt-memo">
-                                {attempt.memo}
-                              </span>
-                            )}
-                          </div>
-                        ))}
+                          {element.timedRecord.memo && (
+                            <span className="detail-attempt-memo">
+                              {element.timedRecord.memo}
+                            </span>
+                          )}
+                        </div>
                       </div>
+                    ) : element.attempts && element.attempts.length > 0 ? (
+                      <>
+                        <div className="attempt-summary">
+                          <span className="attempt-total">
+                            {element.attempts.length}本
+                          </span>
+
+                          <span className="summary-good">
+                            ○{" "}
+                            {
+                              element.attempts.filter(
+                                (attempt) => attempt.result === "○"
+                              ).length
+                            }
+                          </span>
+
+                          <span className="summary-maybe">
+                            △{" "}
+                            {
+                              element.attempts.filter(
+                                (attempt) => attempt.result === "△"
+                              ).length
+                            }
+                          </span>
+
+                          <span className="summary-bad">
+                            ×{" "}
+                            {
+                              element.attempts.filter(
+                                (attempt) => attempt.result === "×"
+                              ).length
+                            }
+                          </span>
+                        </div>
+
+                        <div className="detail-attempts">
+                          {element.attempts.map(
+                            (attempt, attemptIndex) => (
+                              <div
+                                className="detail-attempt"
+                                key={attempt.id ?? attemptIndex}
+                              >
+                                <span
+                                  className={`detail-result ${
+                                    attempt.result === "○"
+                                      ? "detail-result-good"
+                                      : attempt.result === "△"
+                                      ? "detail-result-maybe"
+                                      : attempt.result === "×"
+                                      ? "detail-result-bad"
+                                      : ""
+                                  }`}
+                                >
+                                  {attempt.result || "－"}
+                                </span>
+
+                                <span className="detail-attempt-number">
+                                  {attemptIndex + 1}本目
+                                </span>
+
+                                {attempt.memo && (
+                                  <span className="detail-attempt-memo">
+                                    {attempt.memo}
+                                  </span>
+                                )}
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </>
                     ) : (
                       <p className="detail-no-attempts">
                         練習記録はありません
@@ -1703,6 +1989,24 @@ const recentElements = []
                       onClick={() => {
                         setEditingElementIndex(index)
 
+                        if (
+                          element.recordMode === "timed" &&
+                          element.timedRecord
+                        ) {
+                          setTimedDuration(
+                            element.timedRecord.duration || ""
+                          )
+                          setTimedResult(
+                            element.timedRecord.result || ""
+                          )
+                          setTimedMemo(
+                            element.timedRecord.memo || ""
+                          )
+
+                          setScreen("editTimedRecord")
+                          return
+                        }
+
                         setEditingAttempts(
                           (element.attempts || []).map((attempt) => ({
                             ...attempt,
@@ -1712,7 +2016,9 @@ const recentElements = []
                         setScreen("editElementAttempts")
                       }}
                     >
-                      ○△×・メモを編集
+                      {element.recordMode === "timed"
+                        ? "時間記録を編集"
+                        : "○△×・メモを編集"}
                     </button>
 
                     <button
@@ -2025,6 +2331,188 @@ const recentElements = []
         <button
           className="secondary-button"
           onClick={() => setScreen("historyDetail")}
+        >
+          編集をキャンセル
+        </button>
+      </div>
+    )
+  }
+
+  // -----------------------------
+  // 時間記録の編集画面
+  // -----------------------------
+  if (screen === "editTimedRecord") {
+    const editingElement =
+      selectedRecord?.elements?.[editingElementIndex]
+
+    if (!editingElement) {
+      return (
+        <div className="screen">
+          <p>編集する記録がありません。</p>
+
+          <button
+            className="secondary-button"
+            onClick={() =>
+              setScreen("historyDetail")
+            }
+          >
+            練習記録に戻る
+          </button>
+        </div>
+      )
+    }
+
+    return (
+      <div className="screen">
+        <div className="page-header">
+          <h2>時間記録を編集</h2>
+          <p>
+            {editingElement.category}：
+            {editingElement.name}
+          </p>
+        </div>
+
+        <div className="form-group">
+          <label>練習時間（分）</label>
+
+          <input
+            type="number"
+            min="1"
+            value={timedDuration}
+            onChange={(e) =>
+              setTimedDuration(e.target.value)
+            }
+            placeholder="例：5"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>総合評価</label>
+
+          <div className="result-buttons">
+            <button
+              type="button"
+              className={`result-button ${
+                timedResult === "○"
+                  ? "selected-good"
+                  : ""
+              }`}
+              onClick={() =>
+                setTimedResult("○")
+              }
+            >
+              <span className="result-symbol result-good-symbol">
+                ○
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className={`result-button ${
+                timedResult === "△"
+                  ? "selected-maybe"
+                  : ""
+              }`}
+              onClick={() =>
+                setTimedResult("△")
+              }
+            >
+              <span className="result-symbol result-maybe-symbol">
+                △
+              </span>
+            </button>
+
+            <button
+              type="button"
+              className={`result-button ${
+                timedResult === "×"
+                  ? "selected-bad"
+                  : ""
+              }`}
+              onClick={() =>
+                setTimedResult("×")
+              }
+            >
+              <span className="result-symbol result-bad-symbol">
+                ×
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>メモ</label>
+
+          <textarea
+            value={timedMemo}
+            onChange={(e) =>
+              setTimedMemo(e.target.value)
+            }
+            placeholder="この練習についてのメモ"
+            rows="4"
+          />
+        </div>
+
+        <button
+          className="main-button"
+          disabled={
+            timedDuration === "" ||
+            timedResult === ""
+          }
+          onClick={() => {
+            const updatedElements =
+              selectedRecord.elements.map(
+                (element, index) =>
+                  index === editingElementIndex
+                    ? {
+                        ...element,
+                        recordMode: "timed",
+                        timedRecord: {
+                          duration: timedDuration,
+                          result: timedResult,
+                          memo: timedMemo,
+                        },
+                        attempts: [],
+                      }
+                    : element
+              )
+
+            const updatedRecord = {
+              ...selectedRecord,
+              elements: updatedElements,
+            }
+
+            setPracticeRecords((prevRecords) =>
+              prevRecords.map((record) =>
+                record.id === selectedRecord.id
+                  ? updatedRecord
+                  : record
+              )
+            )
+
+            setSelectedRecord(updatedRecord)
+
+            setEditingElementIndex(null)
+            setTimedDuration("")
+            setTimedResult("")
+            setTimedMemo("")
+
+            setScreen("historyDetail")
+          }}
+        >
+          変更を保存
+        </button>
+
+        <button
+          className="secondary-button"
+          onClick={() => {
+            setEditingElementIndex(null)
+            setTimedDuration("")
+            setTimedResult("")
+            setTimedMemo("")
+
+            setScreen("historyDetail")
+          }}
         >
           編集をキャンセル
         </button>
