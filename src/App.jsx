@@ -24,11 +24,13 @@ function App() {
   const [elementSearch, setElementSearch] = useState("")
   const [selectedJumps, setSelectedJumps] = useState([""])
   const [selectedSpins, setSelectedSpins] = useState([
-    {
-      type: "",
-      positions: [""]
-    }
-  ])
+          {
+            type: "",
+            axisFoot: "",
+            rotationDirection: "",
+            positions: [""]
+          }
+        ])
 
   // -----------------------------
   // 練習記録
@@ -680,6 +682,8 @@ const recentElements = []
               setSelectedSpins([
                 {
                   type: "",
+                  axisFoot: "",
+                  rotationDirection: "",
                   positions: [""]
                 }
               ])
@@ -731,6 +735,8 @@ const recentElements = []
                         setSelectedSpins(
                           element.spins.map((spin) => ({
                             type: spin.type,
+                            axisFoot: spin.axisFoot || "",
+                            rotationDirection: spin.rotationDirection || "",
                             positions: [...spin.positions],
                           }))
                         )
@@ -739,6 +745,8 @@ const recentElements = []
                         setSelectedSpins([
                           {
                             type: element.name,
+                            axisFoot: "",
+                            rotationDirection: "",
                             positions: [""],
                           },
                         ])
@@ -962,6 +970,50 @@ const recentElements = []
                     </div>
                   ))}
 
+                  <div className="form-group">
+                    <label>軸足</label>
+
+                    <select
+                      value={spin.axisFoot}
+                      onChange={(e) => {
+                        const newSpins = [...selectedSpins]
+
+                        newSpins[spinIndex] = {
+                          ...newSpins[spinIndex],
+                          axisFoot: e.target.value,
+                        }
+
+                        setSelectedSpins(newSpins)
+                      }}
+                    >
+                      <option value="">軸足を選択</option>
+                      <option value="左">左</option>
+                      <option value="右">右</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>回転方向</label>
+
+                    <select
+                      value={spin.rotationDirection}
+                      onChange={(e) => {
+                        const newSpins = [...selectedSpins]
+
+                        newSpins[spinIndex] = {
+                          ...newSpins[spinIndex],
+                          rotationDirection: e.target.value,
+                        }
+
+                        setSelectedSpins(newSpins)
+                      }}
+                    >
+                      <option value="">回転方向を選択</option>
+                      <option value="反時計回り">反時計回り</option>
+                      <option value="時計回り">時計回り</option>
+                    </select>
+                  </div>
+
                   {/* このスピンの姿勢を追加 */}
                   {spin.positions.length < 4 && (
                     <button
@@ -1032,8 +1084,10 @@ const recentElements = []
                       ...prevSpins,
                       {
                         type: "",
+                        axisFoot: "",
+                        rotationDirection: "",
                         positions: [""],
-                      },
+                      }
                     ])
                   }}
                 >
@@ -1135,9 +1189,11 @@ const recentElements = []
                     category: "スピン",
                     name: spinElementName,
                     spins: selectedSpins.map((spin) => ({
-                      type: spin.type,
-                      positions: [...spin.positions],
-                    })),
+                    type: spin.type,
+                    axisFoot: spin.axisFoot,
+                    rotationDirection: spin.rotationDirection,
+                    positions: [...spin.positions],
+                  })),
                     attempts: [],
                   }
                 : {
@@ -1880,6 +1936,30 @@ const recentElements = []
                       {element.category}：{element.name}
                     </div>
 
+                    {element.category === "スピン" &&
+                      element.spins?.length > 0 && (
+                        <div className="spin-detail-info">
+                          {element.spins.map((spin, spinIndex) => (
+                            <div key={spinIndex}>
+                              {(spin.axisFoot || spin.rotationDirection) && (
+                                <p>
+                                  スピン{spinIndex + 1}：
+                                  {spin.axisFoot
+                                    ? `軸足 ${spin.axisFoot}`
+                                    : ""}
+                                  {spin.axisFoot && spin.rotationDirection
+                                    ? " / "
+                                    : ""}
+                                  {spin.rotationDirection
+                                    ? `回転方向 ${spin.rotationDirection}`
+                                    : ""}
+                                </p>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
                     {element.recordMode === "timed" && element.timedRecord ? (
                       <div className="detail-attempts">
                         <div className="detail-attempt">
@@ -2045,11 +2125,16 @@ const recentElements = []
                             element.spins
                               ? element.spins.map((spin) => ({
                                   type: spin.type,
+                                  axisFoot: spin.axisFoot || "",
+                                  rotationDirection:
+                                    spin.rotationDirection || "",
                                   positions: [...spin.positions],
                                 }))
                               : [
                                   {
                                     type: element.name,
+                                    axisFoot: "",
+                                    rotationDirection: "",
                                     positions: [""],
                                   },
                                 ]
@@ -2931,6 +3016,54 @@ const recentElements = []
                       </select>
                     </div>
 
+                    <div className="form-group">
+                      <label>軸足</label>
+
+                      <select
+                        value={spin.axisFoot || ""}
+                        onChange={(e) => {
+                          const newSpins = [...editingSpins]
+
+                          newSpins[spinIndex] = {
+                            ...newSpins[spinIndex],
+                            axisFoot: e.target.value,
+                          }
+
+                          setEditingSpins(newSpins)
+                        }}
+                      >
+                        <option value="">軸足を選択</option>
+                        <option value="左">左</option>
+                        <option value="右">右</option>
+                      </select>
+                    </div>
+
+                    <div className="form-group">
+                      <label>回転方向</label>
+
+                      <select
+                        value={spin.rotationDirection || ""}
+                        onChange={(e) => {
+                          const newSpins = [...editingSpins]
+
+                          newSpins[spinIndex] = {
+                            ...newSpins[spinIndex],
+                            rotationDirection: e.target.value,
+                          }
+
+                          setEditingSpins(newSpins)
+                        }}
+                      >
+                        <option value="">回転方向を選択</option>
+                        <option value="反時計回り">
+                          反時計回り
+                        </option>
+                        <option value="時計回り">
+                          時計回り
+                        </option>
+                      </select>
+                    </div>
+
                     {positionIndex > 0 && (
                       <button
                         type="button"
@@ -3024,8 +3157,10 @@ const recentElements = []
                     ...prevSpins,
                     {
                       type: "",
+                      axisFoot: "",
+                      rotationDirection: "",
                       positions: [""],
-                    },
+                    }
                   ])
                 }}
               >
@@ -3103,6 +3238,9 @@ const recentElements = []
                       name: newSpinName,
                       spins: editingSpins.map((spin) => ({
                         type: spin.type,
+                        axisFoot: spin.axisFoot || "",
+                        rotationDirection:
+                          spin.rotationDirection || "",
                         positions: [...spin.positions],
                       })),
                     }
