@@ -36,7 +36,7 @@ function App() {
   // 練習記録
   // -----------------------------
   const [attempts, setAttempts] = useState([])
-  const [recordMode, setRecordMode] = useState("")
+  const [, setRecordMode] = useState("")
   const [timedDuration, setTimedDuration] = useState("")
   const [timedResult, setTimedResult] = useState("")
   const [timedMemo, setTimedMemo] = useState("")
