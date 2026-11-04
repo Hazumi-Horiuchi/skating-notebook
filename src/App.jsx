@@ -110,6 +110,7 @@ function App() {
   const spinPositionOptions = {
     "アップライトスピン": [
       "アップライト基本姿勢",
+      "スクラッチ姿勢",
       "Y字スピン",
       "A字スピン",
       "I字スピン",
