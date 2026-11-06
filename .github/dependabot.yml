@@ -11,8 +11,6 @@ updates:
       time: "09:00"
       timezone: "Asia/Tokyo"
     open-pull-requests-limit: 5
-    labels:
-      - "dependencies"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
